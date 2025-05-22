@@ -7,6 +7,14 @@
 	interface IProps {
 		value: string;
 		onChange?: (value: string) => void;
+		onFileAccept?: (event: Event) => void;
+		onAttachmentAdd?: (event: Event) => void;
+		onAttachmentRemove?: (event: Event) => void;
+		onSelectionChange?: (event: Event) => void;
+		onFocus?: (event: Event) => void;
+		onBlur?: (event: Event) => void;
+		onActionInvoke?: (event: Event) => void;
+		label?: string;
 		config?: ITrixConfig;
 		disabled?: boolean;
 		required?: boolean;
@@ -15,6 +23,14 @@
 	let {
 		value = $bindable(),
 		onChange = undefined,
+		onFileAccept = undefined,
+		onAttachmentAdd = undefined,
+		onAttachmentRemove = undefined,
+		onSelectionChange = undefined,
+		onFocus = undefined,
+		onBlur = undefined,
+		onActionInvoke = undefined,
+		label = '',
 		disabled = false,
 		required = false,
 		config
@@ -140,73 +156,65 @@
 
 	const setCss = () => {
 		if (config?.css) {
-			Trix.config.css = {
-				...Trix.config.css,
-				...config.css
-			};
+			for (const key in config.css) {
+				Trix.config.css[key] = config.css[key];
+			}
 		}
 	};
 
 	const setBrowser = () => {
 		if (config?.browser) {
-			Trix.config.browser = {
-				...Trix.config.browser,
-				...config.browser
-			};
+			for (const key in config.browser) {
+				Trix.config.browser[key] = config.browser[key];
+			}
 		}
 	};
 
 	const setDompurify = () => {
 		if (config?.dompurify) {
-			Trix.config.dompurify = {
-				...Trix.config.dompurify,
-				...config.dompurify
-			};
+			for (const key in config.dompurify) {
+				Trix.config.dompurify[key] = config.dompurify[key];
+			}
 		}
 	};
 
 	const setFileSize = () => {
 		if (config?.fileSize) {
-			Trix.config.fileSize = {
-				...Trix.config.fileSize,
-				...config.fileSize
-			};
+			for (const key in config.fileSize) {
+				Trix.config.fileSize[key] = config.fileSize[key];
+			}
 		}
 	};
 
 	const setInput = () => {
 		if (config?.input) {
-			Trix.config.input = {
-				...Trix.config.input,
-				...config.input
-			};
+			for (const key in config.input) {
+				Trix.config.input[key] = config.input[key];
+			}
 		}
 	};
 
 	const setKeyNames = () => {
 		if (config?.keyNames) {
-			Trix.config.keyNames = {
-				...Trix.config.keyNames,
-				...config.keyNames
-			};
+			for (const key in config.keyNames) {
+				Trix.config.keyNames[key] = config.keyNames[key];
+			}
 		}
 	};
 
 	const setLang = () => {
 		if (config?.lang) {
-			Trix.config.lang = {
-				...Trix.config.lang,
-				...config.lang
-			};
+			for (const key in config.lang) {
+				Trix.config.lang[key] = config.lang[key];
+			}
 		}
 	};
 
 	const setParser = () => {
 		if (config?.parser) {
-			Trix.config.parser = {
-				...Trix.config.parser,
-				...config.parser
-			};
+			for (const key in config.parser) {
+				Trix.config.parser[key] = config.parser[key];
+			}
 		}
 	};
 
@@ -244,19 +252,17 @@
 
 	const setToolbar = () => {
 		if (config?.toolbar) {
-			Trix.config.toolbar = {
-				...Trix.config.toolbar,
-				...config.toolbar
-			};
+			for (const key in config.toolbar) {
+				Trix.config.toolbar[key] = config.toolbar[key];
+			}
 		}
 	};
 
 	const setUndo = () => {
 		if (config?.undo) {
-			Trix.config.undo = {
-				...Trix.config.undo,
-				...config.undo
-			};
+			for (const key in config.undo) {
+				Trix.config.undo[key] = config.undo[key];
+			}
 		}
 	};
 
@@ -276,17 +282,65 @@
 		setUndo();
 	};
 
-	const _onChange = (e: any) => {
+	const _onChange = (e: Event) => {
 		value = e?.target?.value;
 		if (onChange) {
 			onChange(e?.target?.value);
 		}
 	};
 
+	const _onAttachmentAdd = (e: Event) => {
+		if (onAttachmentAdd) {
+			onAttachmentAdd(e);
+		}
+	};
+
+	const _onAttachmentRemove = (e: Event) => {
+		if (onAttachmentRemove) {
+			onAttachmentRemove(e);
+		}
+	};
+
+	const _onFileAccept = (e: Event) => {
+		if (onFileAccept) {
+			onFileAccept(e);
+		}
+	};
+
+	const _onSelectionChange = (e: Event) => {
+		if (onSelectionChange) {
+			onSelectionChange(e);
+		}
+	};
+
+	const _onFocus = (e: Event) => {
+		if (onFocus) {
+			onFocus(e);
+		}
+	};
+
+	const _onBlur = (e: Event) => {
+		if (onBlur) {
+			onBlur(e);
+		}
+	};
+
+	const _onActionInvoke = (e: Event) => {
+		if (onActionInvoke) {
+			onActionInvoke(e);
+		}
+	};
+
 	const initialize = () => {
 		document.addEventListener('trix-before-initialize', beforeInitialize);
-
 		document.addEventListener('trix-change', _onChange);
+		document.addEventListener('trix-focus', _onFocus);
+		document.addEventListener('trix-blur', _onBlur);
+		document.addEventListener('trix-attachment-add', _onAttachmentAdd);
+		document.addEventListener('trix-attachment-remove', _onAttachmentRemove);
+		document.addEventListener('trix-file-accept', _onFileAccept);
+		document.addEventListener('trix-selection-change', _onSelectionChange);
+		document.addEventListener('trix-action-invoke', _onActionInvoke);
 		loaded = true;
 
 		setTimeout(() => {
@@ -305,8 +359,16 @@
 
 {#if BROWSER && loaded}
 	<main>
-		<input id="svelte-trix-input" type="hidden" name="content" />
-		<trix-editor bind:this={el} {disabled} {required} input="svelte-trix-input"
+		{#if label}
+			<label for="svelte-trix-editor">{label}</label>
+		{/if}
+		<input id="svelte-trix-hidden-input" type="hidden" name="content" />
+		<trix-editor
+			bind:this={el}
+			id="svelte-trix-editor"
+			class="svelte-trix-content"
+			{required}
+			input="svelte-trix-hidden-input"
 		></trix-editor>
 	</main>
 {/if}

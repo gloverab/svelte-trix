@@ -23,7 +23,7 @@
 	};
 </script>
 
-<Editor {config} bind:value />
+<Editor bind:value />
 <p>
 	Create your package using @sveltejs/package and preview/showcase your work
 	with SvelteKit
