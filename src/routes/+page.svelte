@@ -3,24 +3,6 @@
 	import type { ITrixConfig } from '$lib/types.js';
 
 	let value = $state('');
-
-	$inspect(value);
-
-	const config: ITrixConfig = {
-		attachments: {
-			preview: {
-				presentation: 'hello'
-			}
-		},
-		blockAttributes: {
-			attachmentGallery: {
-				tagName: 'h3'
-			}
-		},
-		css: {
-			attachment: 'hello5!'
-		}
-	};
 </script>
 
 <Editor bind:value />

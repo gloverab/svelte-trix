@@ -1,11 +1,12 @@
 <script lang="ts">
+	import 'trix/dist/trix.css';
 	import { BROWSER } from 'esm-env';
 	import { onMount } from 'svelte';
-	import 'trix/dist/trix.css';
 	import type { ITrixConfig } from './types.js';
 
 	interface IProps {
 		value: string;
+		config?: ITrixConfig;
 		onChange?: (value: string) => void;
 		onFileAccept?: (event: Event) => void;
 		onAttachmentAdd?: (event: Event) => void;
@@ -15,7 +16,6 @@
 		onBlur?: (event: Event) => void;
 		onActionInvoke?: (event: Event) => void;
 		label?: string;
-		config?: ITrixConfig;
 		disabled?: boolean;
 		required?: boolean;
 	}
@@ -37,7 +37,6 @@
 	}: IProps = $props();
 
 	let Trix: any;
-	let loaded = $state(false);
 	let editor;
 	let el = $state();
 
@@ -341,7 +340,6 @@
 		document.addEventListener('trix-file-accept', _onFileAccept);
 		document.addEventListener('trix-selection-change', _onSelectionChange);
 		document.addEventListener('trix-action-invoke', _onActionInvoke);
-		loaded = true;
 
 		setTimeout(() => {
 			editor = document.querySelector('trix-editor');
@@ -357,7 +355,7 @@
 	});
 </script>
 
-{#if BROWSER && loaded}
+{#if BROWSER}
 	<main>
 		{#if label}
 			<label for="svelte-trix-editor">{label}</label>
