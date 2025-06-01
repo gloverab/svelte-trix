@@ -5,7 +5,7 @@
 	import type { ITrixConfig } from './types.js';
 
 	interface IProps {
-		value: string;
+		value?: string;
 		editor?: any;
 		config?: ITrixConfig;
 		onChange?: (value: string) => void;
