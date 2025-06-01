@@ -6,6 +6,7 @@
 
 	interface IProps {
 		value: string;
+		editor?: any;
 		config?: ITrixConfig;
 		onChange?: (value: string) => void;
 		onFileAccept?: (event: Event) => void;
@@ -14,6 +15,7 @@
 		onSelectionChange?: (event: Event) => void;
 		onFocus?: (event: Event) => void;
 		onBlur?: (event: Event) => void;
+		onPaste?: (event: Event) => void;
 		onActionInvoke?: (event: Event) => void;
 		label?: string;
 		disabled?: boolean;
@@ -22,6 +24,7 @@
 
 	let {
 		value = $bindable(),
+		editor = $bindable(),
 		onChange = undefined,
 		onFileAccept = undefined,
 		onAttachmentAdd = undefined,
@@ -29,6 +32,7 @@
 		onSelectionChange = undefined,
 		onFocus = undefined,
 		onBlur = undefined,
+		onPaste = undefined,
 		onActionInvoke = undefined,
 		label = '',
 		disabled = false,
@@ -37,8 +41,9 @@
 	}: IProps = $props();
 
 	let Trix: any;
-	let editor;
 	let el = $state();
+
+	let _editor = $state<Element | null>();
 
 	const setAttachments = () => {
 		if (config?.attachments?.preview?.presentation !== undefined)
@@ -288,6 +293,12 @@
 		}
 	};
 
+	const _onPaste = (e: Event) => {
+		if (onPaste) {
+			onPaste(e);
+		}
+	};
+
 	const _onAttachmentAdd = (e: Event) => {
 		if (onAttachmentAdd) {
 			onAttachmentAdd(e);
@@ -335,19 +346,28 @@
 		document.addEventListener('trix-change', _onChange);
 		document.addEventListener('trix-focus', _onFocus);
 		document.addEventListener('trix-blur', _onBlur);
+		document.addEventListener('trix-paste', _onPaste);
 		document.addEventListener('trix-attachment-add', _onAttachmentAdd);
 		document.addEventListener('trix-attachment-remove', _onAttachmentRemove);
 		document.addEventListener('trix-file-accept', _onFileAccept);
 		document.addEventListener('trix-selection-change', _onSelectionChange);
 		document.addEventListener('trix-action-invoke', _onActionInvoke);
 
-		setTimeout(() => {
-			editor = document.querySelector('trix-editor');
-			// console.log(editor);
-		}, 900);
+		_editor = document.querySelector('trix-editor');
+		editor = document.querySelector('trix-editor');
 	};
 
-	$inspect(el);
+	$effect(() => {
+		if (disabled && _editor) {
+			_editor.toggleAttribute('disabled', true);
+		}
+	});
+
+	$effect(() => {
+		if (!disabled && _editor) {
+			_editor.toggleAttribute('disabled', false);
+		}
+	});
 
 	onMount(async () => {
 		Trix = (await import('trix')).default;

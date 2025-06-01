@@ -1,6 +1,6 @@
 {
 	"name": "svelte-trix",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",
@@ -57,7 +57,13 @@
 		"vite": "^6.2.6"
 	},
 	"keywords": [
-		"svelte"
+		"svelte",
+		"wysiwyg",
+		"text editor",
+		"editable",
+		"trix",
+		"editor",
+		"trix-editor"
 	],
 	"license": "MIT"
 }
