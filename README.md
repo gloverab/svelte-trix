@@ -45,6 +45,9 @@ This will install svelte-trix as well as the base Trix dependency.
 />
 ```
 
+Both of the above examples will produce a simple rich text editor with buttons on the top that looks like this:
+![Screenshot of a simple text editor created with svelte-trix](https://www.dropbox.com/scl/fi/45d3c6jsvvvwp659ejs74/Screenshot-2025-06-02-at-1.56.17-PM.png?rlkey=q2gwo2tw1904xukxl5msogfj0&raw=1)
+
 ## Props
 
 svelte-trix has typesafe support for all customizations and event listeners that the original Trix library supports, as well as a bindable `value` prop for svelte-ishness.

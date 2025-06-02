@@ -4,4 +4,6 @@
 	let value = $state('');
 </script>
 
-<Editor bind:value />
+<div style="width: 800px;">
+	<Editor bind:value />
+</div>
