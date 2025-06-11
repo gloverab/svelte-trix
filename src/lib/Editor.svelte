@@ -380,7 +380,12 @@
 		{#if label}
 			<label for="svelte-trix-editor">{label}</label>
 		{/if}
-		<input id="svelte-trix-hidden-input" type="hidden" name="content" />
+		<input
+			id="svelte-trix-hidden-input"
+			type="hidden"
+			bind:value
+			name="content"
+		/>
 		<trix-editor
 			bind:this={el}
 			id="svelte-trix-editor"
