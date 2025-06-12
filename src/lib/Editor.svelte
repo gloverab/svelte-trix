@@ -20,6 +20,7 @@
 		label?: string;
 		disabled?: boolean;
 		required?: boolean;
+		hideAttachmentButton?: boolean;
 	}
 
 	let {
@@ -37,6 +38,7 @@
 		label = '',
 		disabled = false,
 		required = false,
+		hideAttachmentButton = false,
 		config
 	}: IProps = $props();
 
@@ -376,7 +378,7 @@
 </script>
 
 {#if BROWSER}
-	<main>
+	<main class:hideAttachmentButton id="svelte-trix-editor-wrapper">
 		{#if label}
 			<label for="svelte-trix-editor">{label}</label>
 		{/if}
@@ -390,3 +392,12 @@
 		></trix-editor>
 	</main>
 {/if}
+
+<style global>
+	:global(
+		#svelte-trix-editor-wrapper.hideAttachmentButton
+			.trix-button-group.trix-button-group--file-tools
+	) {
+		display: none !important;
+	}
+</style>
