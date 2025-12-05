@@ -48,6 +48,38 @@ This will install svelte-trix as well as the base Trix dependency.
 Both of the above examples will produce a simple rich text editor with buttons on the top that looks like this:
 ![Screenshot of a simple text editor created with svelte-trix](https://www.dropbox.com/scl/fi/45d3c6jsvvvwp659ejs74/Screenshot-2025-06-02-at-1.56.17-PM.png?rlkey=q2gwo2tw1904xukxl5msogfj0&raw=1)
 
+### Using Multiple Editors on the Same Page
+
+When using multiple Trix editors on the same page, you should provide custom IDs to avoid conflicts:
+
+```svelte
+<script lang='ts'>
+  import { TrixEditor } from 'svelte-trix';
+</script>
+
+<div class="editors-container">
+  <div class="editor-wrapper">
+    <h2>Editor 1</h2>
+    <TrixEditor 
+      value="This is the content of the first editor."
+      wrapperId="custom-editor-wrapper-1"
+      hiddenInputId="custom-hidden-input-1"
+      editorId="custom-editor-1"
+    />
+  </div>
+
+  <div class="editor-wrapper">
+    <h2>Editor 2</h2>
+    <TrixEditor 
+      value="This is the content of the second editor."
+      wrapperId="custom-editor-wrapper-2"
+      hiddenInputId="custom-hidden-input-2"
+      editorId="custom-editor-2"
+    />
+  </div>
+</div>
+```
+
 ## Props
 
 svelte-trix has typesafe support for all customizations and event listeners that the original Trix library supports, as well as a bindable `value` prop for svelte-ishness.
@@ -59,6 +91,9 @@ svelte-trix has typesafe support for all customizations and event listeners that
 | `editor` | `Element` | Bindable prop that exposes the instance of the TrixEditor directly, should you want to perform any customizations or actions that aren't available through props. | Yes |
 | `label` | `string` | Optional label for the form. | No |
 | `disabled` | `boolean` | Disabled editors are not editable and cannot receive focus. | No |
+| `wrapperId` | `string` | Custom ID for the main wrapper element. Defaults to 'svelte-trix-editor-wrapper'. | No |
+| `hiddenInputId` | `string` | Custom ID for the hidden input element. Defaults to 'svelte-trix-hidden-input'. | No |
+| `editorId` | `string` | Custom ID for the Trix editor element. Defaults to 'svelte-trix-editor'. | No |
 | `config` | `ITrixConfig` | Learn more about [Config](#config) | No |
 
 ### Event Listeners

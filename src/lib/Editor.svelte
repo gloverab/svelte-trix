@@ -4,43 +4,49 @@
 	import { onMount } from 'svelte';
 	import type { ITrixConfig } from './types.js';
 
-	interface IProps {
-		value?: string;
-		editor?: any;
-		config?: ITrixConfig;
-		onChange?: (value: string) => void;
-		onFileAccept?: (event: Event) => void;
-		onAttachmentAdd?: (event: Event) => void;
-		onAttachmentRemove?: (event: Event) => void;
-		onSelectionChange?: (event: Event) => void;
-		onFocus?: (event: Event) => void;
-		onBlur?: (event: Event) => void;
-		onPaste?: (event: Event) => void;
-		onActionInvoke?: (event: Event) => void;
-		label?: string;
-		disabled?: boolean;
-		required?: boolean;
-		hideAttachmentButton?: boolean;
-	}
+ interface IProps {
+ 	value?: string;
+ 	editor?: any;
+ 	config?: ITrixConfig;
+ 	onChange?: (value: string) => void;
+ 	onFileAccept?: (event: Event) => void;
+ 	onAttachmentAdd?: (event: Event) => void;
+ 	onAttachmentRemove?: (event: Event) => void;
+ 	onSelectionChange?: (event: Event) => void;
+ 	onFocus?: (event: Event) => void;
+ 	onBlur?: (event: Event) => void;
+ 	onPaste?: (event: Event) => void;
+ 	onActionInvoke?: (event: Event) => void;
+ 	label?: string;
+ 	disabled?: boolean;
+ 	required?: boolean;
+ 	hideAttachmentButton?: boolean;
+ 	wrapperId?: string;
+ 	hiddenInputId?: string;
+ 	editorId?: string;
+ }
 
-	let {
-		value = $bindable(),
-		editor = $bindable(),
-		onChange = undefined,
-		onFileAccept = undefined,
-		onAttachmentAdd = undefined,
-		onAttachmentRemove = undefined,
-		onSelectionChange = undefined,
-		onFocus = undefined,
-		onBlur = undefined,
-		onPaste = undefined,
-		onActionInvoke = undefined,
-		label = '',
-		disabled = false,
-		required = false,
-		hideAttachmentButton = false,
-		config
-	}: IProps = $props();
+ let {
+ 	value = $bindable(),
+ 	editor = $bindable(),
+ 	onChange = undefined,
+ 	onFileAccept = undefined,
+ 	onAttachmentAdd = undefined,
+ 	onAttachmentRemove = undefined,
+ 	onSelectionChange = undefined,
+ 	onFocus = undefined,
+ 	onBlur = undefined,
+ 	onPaste = undefined,
+ 	onActionInvoke = undefined,
+ 	label = '',
+ 	disabled = false,
+ 	required = false,
+ 	hideAttachmentButton = false,
+ 	wrapperId = 'svelte-trix-editor-wrapper',
+ 	hiddenInputId = 'svelte-trix-hidden-input',
+ 	editorId = 'svelte-trix-editor',
+ 	config
+ }: IProps = $props();
 
 	let Trix: any;
 	let el = $state();
@@ -289,56 +295,58 @@
 	};
 
 	const _onChange = (e: Event) => {
-		value = e?.target?.value;
-		if (onChange) {
-			onChange(e?.target?.value);
+		if (e.target === el) {
+			value = e?.target?.value;
+			if (onChange) {
+				onChange(e?.target?.value);
+			}
 		}
 	};
 
 	const _onPaste = (e: Event) => {
-		if (onPaste) {
+		if (e.target === el && onPaste) {
 			onPaste(e);
 		}
 	};
 
 	const _onAttachmentAdd = (e: Event) => {
-		if (onAttachmentAdd) {
+		if (e.target === el && onAttachmentAdd) {
 			onAttachmentAdd(e);
 		}
 	};
 
 	const _onAttachmentRemove = (e: Event) => {
-		if (onAttachmentRemove) {
+		if (e.target === el && onAttachmentRemove) {
 			onAttachmentRemove(e);
 		}
 	};
 
 	const _onFileAccept = (e: Event) => {
-		if (onFileAccept) {
+		if (e.target === el && onFileAccept) {
 			onFileAccept(e);
 		}
 	};
 
 	const _onSelectionChange = (e: Event) => {
-		if (onSelectionChange) {
+		if (e.target === el && onSelectionChange) {
 			onSelectionChange(e);
 		}
 	};
 
 	const _onFocus = (e: Event) => {
-		if (onFocus) {
+		if (e.target === el && onFocus) {
 			onFocus(e);
 		}
 	};
 
 	const _onBlur = (e: Event) => {
-		if (onBlur) {
+		if (e.target === el && onBlur) {
 			onBlur(e);
 		}
 	};
 
 	const _onActionInvoke = (e: Event) => {
-		if (onActionInvoke) {
+		if (e.target === el && onActionInvoke) {
 			onActionInvoke(e);
 		}
 	};
@@ -355,8 +363,8 @@
 		document.addEventListener('trix-selection-change', _onSelectionChange);
 		document.addEventListener('trix-action-invoke', _onActionInvoke);
 
-		_editor = document.querySelector('trix-editor');
-		editor = document.querySelector('trix-editor');
+		_editor = document.querySelector(`trix-editor#${editorId}`);
+		editor = document.querySelector(`trix-editor#${editorId}`);
 	};
 
 	$effect(() => {
@@ -378,24 +386,24 @@
 </script>
 
 {#if BROWSER}
-	<main class:hideAttachmentButton id="svelte-trix-editor-wrapper">
+	<main class:hideAttachmentButton id={wrapperId}>
 		{#if label}
-			<label for="svelte-trix-editor">{label}</label>
+			<label for={editorId}>{label}</label>
 		{/if}
-		<input id="svelte-trix-hidden-input" {value} type="hidden" name="content" />
+		<input id={hiddenInputId} {value} type="hidden" name="content" />
 		<trix-editor
 			bind:this={el}
-			id="svelte-trix-editor"
+			id={editorId}
 			class="svelte-trix-content"
 			{required}
-			input="svelte-trix-hidden-input"
+			input={hiddenInputId}
 		></trix-editor>
 	</main>
 {/if}
 
 <style global>
 	:global(
-		#svelte-trix-editor-wrapper.hideAttachmentButton
+		[id].hideAttachmentButton
 			.trix-button-group.trix-button-group--file-tools
 	) {
 		display: none !important;
